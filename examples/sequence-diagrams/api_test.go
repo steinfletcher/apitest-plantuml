@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestGetUser_With_Default_Report_Formatter(t *testing.T) {
+func TestGetUser(t *testing.T) {
 	apiTest("gets the user 1").
 		Mocks(getPreferencesMock, getUserMock).
 		Post("/user/search").

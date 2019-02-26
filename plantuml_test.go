@@ -3,9 +3,9 @@ package plantuml
 import (
 	"fmt"
 	"github.com/steinfletcher/apitest"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	"reflect"
 	"strings"
 	"testing"
 )
@@ -19,19 +19,21 @@ func (p *writer) Write(data []byte) (int, error) {
 	return -1, nil
 }
 
-func TestNewFormatter(t *testing.T) {
-	t.SkipNow()
+func normalize(s string) string {
+	return strings.Join(strings.Fields(s), " ")
+}
 
+func TestNewFormatter(t *testing.T) {
 	recorder := aRecorder()
 	capture := &writer{}
 
 	NewFormatter(capture).Format(recorder)
 
-	actual := string(capture.captured)
-	expected := ``
+	actual := capture.captured
+	expected, _ := ioutil.ReadFile("testdata/snapshot.txt")
 
-	if !reflect.DeepEqual(expected, actual) {
-		fmt.Printf("Expected '%s'\nReceived '%s'\n", expected, actual)
+	if normalize(string(expected)) != normalize(actual) {
+		fmt.Printf("Expected '%s'\nReceived '%s'\n", string(expected), actual)
 		t.Fail()
 	}
 }

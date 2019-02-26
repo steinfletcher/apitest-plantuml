@@ -107,11 +107,8 @@ func buildMarkup(r *apitest.Recorder) (string, error) {
 
 func escape(in string) string {
 	return in
-	//in = strings.Replace(in,"\n","\\n",-1)
-	//return strings.Replace(in,"\t","\\t",-1)
 }
 
 func formatNote(entry apitest.LogEntry) string {
 	return fmt.Sprintf("%s%s", entry.Header, entry.Body)
-	//return fmt.Sprintf("%s%s", escape(entry.Header), escape(entry.Body))
 }
