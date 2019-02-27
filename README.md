@@ -1,5 +1,6 @@
 # apitest-plantuml
 
+[![GoDoc](https://godoc.org/github.com/steinfletcher/apitest-plantuml?status.svg)](https://godoc.org/github.com/steinfletcher/apitest-plantuml)
 [![Build Status](https://travis-ci.org/steinfletcher/apitest-plantuml.svg?branch=master)](https://travis-ci.org/steinfletcher/apitest-plantuml)
 
 Formats the results of an [apitest](https://github.com/steinfletcher/apitest) run as plant uml markup.
