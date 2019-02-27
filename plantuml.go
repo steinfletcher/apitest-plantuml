@@ -2,11 +2,13 @@ package plantuml
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/steinfletcher/apitest"
 	"io"
 	"strconv"
+	"strings"
 )
 
 const requestOperation = "->"
@@ -51,16 +53,23 @@ func (r *DSL) addRow(operation, source, target, description, body string) {
 }
 
 func (r *DSL) ToString() string {
-	return fmt.Sprintf("@startuml\nskinparam noteFontSize 11\nskinparam monochrome true\n%s\n@enduml", r.data.String())
+	return fmt.Sprintf("\n@startuml\nskinparam noteFontSize 11\nskinparam monochrome true\n%s\n@enduml", r.data.String())
 }
 
 func (r *Formatter) Format(recorder *apitest.Recorder) {
+	var sb strings.Builder
+
+	meta, err := json.Marshal(recorder.Meta)
+
 	markup, err := buildMarkup(recorder)
 	if err != nil {
 		panic(err)
 	}
 
-	_, err = r.writer.Write([]byte(markup))
+	sb.Write(meta)
+	sb.Write([]byte(markup))
+
+	_, err = r.writer.Write([]byte(sb.String()))
 	if err != nil {
 		panic(err)
 	}

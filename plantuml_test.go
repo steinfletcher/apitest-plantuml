@@ -1,8 +1,11 @@
 package plantuml
 
 import (
+	"bufio"
+	"bytes"
 	"fmt"
 	"github.com/steinfletcher/apitest"
+	"github.com/steinfletcher/apitest/assert"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -10,17 +13,19 @@ import (
 	"testing"
 )
 
-type writer struct {
-	captured string
-}
+func TestWritesTheMeta(t *testing.T) {
+	recorder := aRecorder()
+	capture := &writer{}
 
-func (p *writer) Write(data []byte) (int, error) {
-	p.captured = strings.TrimSpace(string(data))
-	return -1, nil
-}
+	NewFormatter(capture).Format(recorder)
 
-func normalize(s string) string {
-	return strings.Join(strings.Fields(s), " ")
+	actual := bytes.NewReader([]byte(capture.captured))
+	firstLine, _, err := bufio.NewReader(actual).ReadLine()
+	if err != nil {
+		panic(err)
+	}
+
+	assert.Equal(t, `{"host":"example.com","method":"GET","name":"some test","path":"/user"}`, string(firstLine))
 }
 
 func TestNewFormatter(t *testing.T) {
@@ -36,6 +41,19 @@ func TestNewFormatter(t *testing.T) {
 		fmt.Printf("Expected '%s'\nReceived '%s'\n", string(expected), actual)
 		t.Fail()
 	}
+}
+
+type writer struct {
+	captured string
+}
+
+func (p *writer) Write(data []byte) (int, error) {
+	p.captured = strings.TrimSpace(string(data))
+	return -1, nil
+}
+
+func normalize(s string) string {
+	return strings.Join(strings.Fields(s), " ")
 }
 
 func aRecorder() *apitest.Recorder {

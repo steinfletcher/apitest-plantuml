@@ -1,3 +1,4 @@
+{"host":"example.com","method":"GET","name":"some test","path":"/user"}
 @startuml
 skinparam noteFontSize 11
 skinparam monochrome true
