@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/steinfletcher/apitest"
-	"github.com/steinfletcher/apitest/assert"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -25,7 +24,9 @@ func TestWritesTheMeta(t *testing.T) {
 		panic(err)
 	}
 
-	assert.Equal(t, `{"host":"example.com","method":"GET","name":"some test","path":"/user"}`, string(firstLine))
+	if `{"host":"example.com","method":"GET","name":"some test","path":"/user"}` != string(firstLine) {
+		t.Fail()
+	}
 }
 
 func TestNewFormatter(t *testing.T) {
