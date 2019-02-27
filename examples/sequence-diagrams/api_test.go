@@ -38,7 +38,12 @@ var getUserMock = apitest.NewMock().
 type fileWriter struct{}
 
 func (p *fileWriter) Write(data []byte) (int, error) {
-	err := ioutil.WriteFile(".sequence/diagram.txt", data, os.ModePerm)
+	err := os.MkdirAll(".sequence", os.ModePerm)
+	if err != nil {
+		panic(err)
+	}
+
+	err = ioutil.WriteFile(".sequence/diagram.txt", data, os.ModePerm)
 	if err != nil {
 		panic(err)
 	}
