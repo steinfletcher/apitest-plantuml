@@ -35,7 +35,7 @@ var getUserMock = apitest.NewMock().
 	Status(http.StatusOK).
 	End()
 
-type fileWriter struct {}
+type fileWriter struct{}
 
 func (p *fileWriter) Write(data []byte) (int, error) {
 	err := ioutil.WriteFile(".sequence/diagram.txt", data, os.ModePerm)
